@@ -2,6 +2,7 @@ package de.franziskaneum;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -21,12 +22,19 @@ import static de.franziskaneum.vplan.VPlanNotificationManager.ACTION_NEW_VPLAN_A
 public class FranzFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+
+        Log.d("main", "Token Refreshed: " + s);
+    }
+
+    @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
         String from = remoteMessage.getFrom();
 
-        if (from != null && from.equalsIgnoreCase("/topics/vplan")) {
+        if ("/topics/vplan".equalsIgnoreCase(from)) {
             Map<String, String> data = remoteMessage.getData();
             String key = "new_vplan_available";
             if (data.containsKey(key) && "true".equalsIgnoreCase(data.get(key))) {

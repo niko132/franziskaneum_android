@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -148,20 +149,14 @@ public class TimetableFragment extends DrawerFragment implements
                             return;
 
                         Calendar today = Calendar.getInstance();
-                        today.set(Calendar.HOUR_OF_DAY, 0);
-                        today.set(Calendar.MINUTE, 0);
-                        today.set(Calendar.SECOND, 0);
-                        today.set(Calendar.MILLISECOND, 0);
+                        int todayWeek = today.get(Calendar.WEEK_OF_YEAR);
 
                         VPlan.VPlanDayData vplanDay = vplan.get(0);
-                        for (VPlan.VPlanDayData vd : vplan) {
-                            if (vd.getCalendarDate().after(today))
-                                break;
+                        int vplanWeek = vplanDay.getCalendarDate().get(Calendar.WEEK_OF_YEAR);
 
-                            vplanDay = vd;
-                        }
+                        int weekDiff = Math.abs(todayWeek - vplanWeek);
 
-                        week = vplanDay.getCurrentWeek();
+                        week = (vplanDay.getCurrentWeek() + weekDiff) % 2;
                         if (timetable != null && timetable.size() > week) {
                             abWeekSpinner.setSelection(week);
                             pagerAdapter.setTimetableWeek(timetable.get(week));
@@ -203,7 +198,7 @@ public class TimetableFragment extends DrawerFragment implements
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(KEY_SHOW_TIMES, showTimes);
         super.onSaveInstanceState(outState);
     }

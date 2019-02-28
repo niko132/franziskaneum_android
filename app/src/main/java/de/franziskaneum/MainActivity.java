@@ -1,8 +1,5 @@
 package de.franziskaneum;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,15 +29,16 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Calendar;
 
 import de.franziskaneum.drawer.DrawerActivity;
 import de.franziskaneum.news.NewsFragment;
-import de.franziskaneum.settings.AppUpdateService;
 import de.franziskaneum.settings.SettingsActivity;
 import de.franziskaneum.settings.SettingsManager;
 import de.franziskaneum.teacher.TeacherFragment;
@@ -214,7 +212,6 @@ public class MainActivity extends DrawerActivity {
         navigationView.getMenu().performIdentifierAction(selectedDrawerItemID, 0);
 
         setupDrawerSlider((SliderLayout) navigationView.inflateHeaderView(R.layout.drawer_header));
-        setupAppUpdate();
         refreshTeacherList();
         updateSchoolClassIfNeeded();
 
@@ -223,7 +220,13 @@ public class MainActivity extends DrawerActivity {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         FirebaseMessaging.getInstance().subscribeToTopic("vplan");
 
-        Log.d("main", "Token: " + FirebaseInstanceId.getInstance().getToken());
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                Log.d("main", "Token: " + instanceIdResult.getToken());
+            }
+        });
     }
 
     @Override
@@ -347,24 +350,6 @@ public class MainActivity extends DrawerActivity {
         sliderLayout.addSlider(sliderView);
 
         sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
-    }
-
-    private void setupAppUpdate() {
-        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-
-        Intent appUpdateIntent = new Intent(this, AppUpdateService.class);
-        PendingIntent appUpdatePendingIntent = PendingIntent.getService(this,
-                Constants.PENDING_INTENT_ALARM_APP_UPDATE_SERVICE, appUpdateIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 0);
-
-        am.cancel(appUpdatePendingIntent);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, appUpdatePendingIntent);
-
-        startService(appUpdateIntent);
     }
 
     private void refreshTeacherList() {

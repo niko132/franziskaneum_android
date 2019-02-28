@@ -53,17 +53,6 @@
                 android:targetPackage="de.franziskaneum" />
         </net.xpece.android.support.preference.Preference>
 
-        <!--
-        <net.xpece.android.support.preference.Preference
-            android:summary="@string/check_for_updates"
-            android:title="@string/app_update">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetClass="de.franziskaneum.settings.AppUpdateActivity"
-                android:targetPackage="de.franziskaneum" />
-        </net.xpece.android.support.preference.Preference>
-        -->
-
         <net.xpece.android.support.preference.Preference android:title="@string/contact_developer">
             <intent
                 android:action="android.intent.action.SENDTO"

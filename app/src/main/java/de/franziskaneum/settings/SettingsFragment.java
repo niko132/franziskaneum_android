@@ -1,10 +1,11 @@
 package de.franziskaneum.settings;
 
-import de.franziskaneum.R;
-import de.franziskaneum.vplan.VPlanNotificationManager;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.XpPreferenceFragment;
+
+import de.franziskaneum.R;
+import de.franziskaneum.vplan.VPlanNotificationManager;
 
 public class SettingsFragment extends XpPreferenceFragment {
 
