@@ -522,6 +522,7 @@ public class VPlanNotificationManager {
                     Constants.PENDING_INTENT_NOTIFICATION_VPLAN_DELETE,
                     deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setDeleteIntent(deletePendingIntent);
+            builder.setOnlyAlertOnce(true);
 
             if (vplanNotification.size() == 1) {
                 VPlanNotification.VPlanNotificationDay vplanDay = vplanNotification.get(0);
