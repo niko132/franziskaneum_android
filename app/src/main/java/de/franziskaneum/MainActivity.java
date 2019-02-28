@@ -81,8 +81,6 @@ public class MainActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // test
-
         settings = SettingsManager.getInstance();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
