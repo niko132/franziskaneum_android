@@ -239,7 +239,7 @@ public class VPlanFragment extends DrawerFragment implements
             VPlanNotificationManager.getInstance().getNotificationFromVPlanAsync(vplan, new FranzCallback() {
                 @Override
                 public void onCallback(int status, Object... objects) {
-                    if (objects.length > 0)
+                    if (objects != null && objects.length > 0)
                         VPlanFragment.this.vplanNotification = (VPlanNotification) objects[0];
                     else
                         VPlanFragment.this.vplanNotification = null;
